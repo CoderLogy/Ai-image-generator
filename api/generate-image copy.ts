@@ -1,20 +1,23 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
-import sharp from "sharp";
+import express from "express";
 import dotenv from "dotenv";
+import sharp from "sharp";
+import path from "path";
+import { fileURLToPath } from "url";
+import cors from "cors";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
+const PORT = process.env.PORT || 3000;
+const app = express()
 
-export default async function handler(
-    req: VercelRequest,
-    res: VercelResponse
-) {
-    if (req.method !== "POST") {
-        return res.status(405).json({ error: "Method not allowed" });
-    }
+app.use(cors());
+app.use(express.json())
 
+app.post("/api/generate-image", async (req, res) => {
     try {
         const { prompt } = req.body;
-
         if (!prompt) {
             return res.status(400).json({ error: "Prompt is required" });
         }
@@ -61,9 +64,22 @@ export default async function handler(
             .toBuffer();
 
         res.setHeader("Content-Type", "image/png");
-        res.status(200).send(resized);
+        res.send(resized);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Image generation failed" });
     }
-}
+});
+
+const clientDistPath = path.join(__dirname, "../dist");
+app.use(express.static(clientDistPath));
+
+// React router fallback
+app.get("*", (_, res) => {
+    res.sendFile(path.join(clientDistPath, "index.html"));
+});
+
+
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
