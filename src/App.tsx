@@ -6,7 +6,6 @@ function App() {
     const [prompt, setPrompt] = useState("");
     const [imageUrl, setImageUrl] = useState<string|null>(null)
     const [loading, setLoading] = useState(false);
-    <Analytics/>
     async function generateImage() {
         setLoading(true);
         setImageUrl(null);
@@ -43,13 +42,16 @@ function App() {
         }
     }
     return (
+        <div>
+            <Analytics/>
         <Layout
             prompt={prompt}
             setPrompt={setPrompt}
             generateImage={generateImage}
             loading={loading}
             imageUrl={imageUrl}
-        />
+            />
+        </div>
     );
 };
 
