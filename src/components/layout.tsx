@@ -3,6 +3,7 @@ import { Background }  from "@/components/background"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Spinner } from "@/components/ui/spinner"
+import { Analytics } from "@vercel/analytics/next"
 
 interface LayoutProps {
     prompt: string;
@@ -47,7 +48,8 @@ export function Layout({ prompt, setPrompt, generateImage, loading, imageUrl }: 
                         )}
                     </Button>
                 </div>
-                </div>
+            </div>
+            <Analytics />
         </Background>
     )
 }
