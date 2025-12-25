@@ -1,6 +1,6 @@
 import {Layout} from "@/components/layout"
 import { useState } from "react";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
     const [prompt, setPrompt] = useState("");
